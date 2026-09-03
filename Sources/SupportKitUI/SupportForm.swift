@@ -107,8 +107,7 @@ struct SupportFormContent: View {
             }
             .listRowBackground(theme.rowBackground)
         }
-        .scrollContentBackground(.hidden)
-        .background(theme.background)
+        .supportFormBackground(theme.background)
         .tint(theme.tint)
         .sheet(isPresented: $model.isShowingPreview, onDismiss: model.cancelPreview) {
             if let prepared = model.preparedSubmission {
@@ -137,5 +136,17 @@ struct SupportFormContent: View {
                 onSubmission(result)
             }
         }
+    }
+}
+
+private extension View {
+    @ViewBuilder
+    func supportFormBackground(_ color: Color) -> some View {
+        #if os(tvOS)
+            background(color)
+        #else
+            scrollContentBackground(.hidden)
+                .background(color)
+        #endif
     }
 }

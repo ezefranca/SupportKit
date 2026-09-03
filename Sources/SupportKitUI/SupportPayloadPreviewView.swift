@@ -58,7 +58,7 @@ struct SupportPayloadPreviewView: View {
 
     @ViewBuilder
     private func diagnosticValue(_ value: String) -> some View {
-        #if os(watchOS)
+        #if os(tvOS) || os(watchOS)
             Text(value)
         #else
             Text(value)
