@@ -1,0 +1,87 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "supportkit-gateway",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-03",
+  "vars": {
+    // Secure default: requests fail closed until these assertion settings are replaced.
+    // Use AUTH_REQUIRED=false only for local evaluation, never for production.
+    "AUTH_REQUIRED": "true",
+    "AUTH_JWT_ISSUER": "https://auth.example.invalid/",
+    "AUTH_JWT_AUDIENCE": "supportkit-gateway",
+    "AUTH_JWKS_URL": "https://auth.example.invalid/.well-known/jwks.json",
+    "GITHUB_API_BASE_URL": "https://api.github.com",
+    "GITHUB_API_VERSION": "2026-03-10"
+  },
+  "d1_databases": [
+    {
+      "binding": "SUPPORTKIT_DB",
+      "database_name": "supportkit-gateway",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "REPORT_QUEUE",
+        "queue": "supportkit-reports"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "supportkit-reports",
+        "max_batch_size": 5,
+        "max_batch_timeout": 5,
+        "max_retries": 20,
+        "retry_delay": 30,
+        "dead_letter_queue": "supportkit-reports-dlq",
+        "max_concurrency": 5
+      }
+    ]
+  },
+  "ratelimits": [
+    {
+      "name": "EDGE_RATE_LIMITER",
+      "namespace_id": "1001000",
+      "simple": {
+        "limit": 60,
+        "period": 60
+      }
+    },
+    {
+      "name": "ACTOR_RATE_LIMITER",
+      "namespace_id": "1001001",
+      "simple": {
+        "limit": 20,
+        "period": 60
+      }
+    },
+    {
+      "name": "PROJECT_RATE_LIMITER",
+      "namespace_id": "1001002",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    }
+  ],
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
+  "limits": {
+    "cpu_ms": 30000
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.05
+    }
+  }
+}

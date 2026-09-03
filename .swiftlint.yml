@@ -1,0 +1,75 @@
+included:
+  - Sources
+  - Tests
+
+excluded:
+  - .build
+  - Gateway
+  - DerivedData
+
+strict: true
+
+disabled_rules:
+  - trailing_comma
+
+opt_in_rules:
+  - array_init
+  - attributes
+  - closure_spacing
+  - contains_over_filter_count
+  - empty_count
+  - empty_string
+  - explicit_init
+  - fallthrough
+  - fatal_error_message
+  - first_where
+  - force_unwrapping
+  - identical_operands
+  - implicitly_unwrapped_optional
+  - last_where
+  - legacy_multiple
+  - modifier_order
+  - operator_usage_whitespace
+  - overridden_super_call
+  - prefer_self_type_over_type_of_self
+  - redundant_nil_coalescing
+  - sorted_first_last
+  - toggle_bool
+  - unhandled_throwing_task
+  - weak_delegate
+
+line_length:
+  warning: 120
+  error: 160
+  ignores_comments: true
+  ignores_urls: true
+
+type_body_length:
+  warning: 300
+  error: 450
+
+file_length:
+  warning: 450
+  error: 700
+
+function_body_length:
+  warning: 60
+  error: 100
+
+identifier_name:
+  min_length:
+    warning: 2
+  excluded:
+    - id
+
+custom_rules:
+  hardcoded_github_token:
+    name: Hardcoded GitHub token
+    regex: '(github_pat_[A-Za-z0-9_]{20,}|gh[pousr]_[A-Za-z0-9_]{20,})'
+    message: Never put a GitHub credential in source code.
+    severity: error
+  sensitive_user_defaults:
+    name: Sensitive UserDefaults key
+    regex: 'UserDefaults[^\n]*(token|password|secret|api[_-]?key)'
+    message: Credentials belong in Keychain, never UserDefaults.
+    severity: error

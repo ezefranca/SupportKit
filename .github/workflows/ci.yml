@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  swift:
+    name: Swift package
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install quality tools
+        run: |
+          brew install swiftformat swiftlint ripgrep
+          npm install --global jscpd@5.1.0
+
+      - name: Validate privacy manifest
+        run: plutil -lint Sources/SupportKit/PrivacyInfo.xcprivacy
+
+      - name: Run quality, release build, and tests
+        run: ./scripts/quality.sh --ci
+
+  apple-platforms:
+    name: Compile ${{ matrix.name }}
+    runs-on: macos-26
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: iOS
+            destination: generic/platform=iOS Simulator
+            slug: ios
+          - name: tvOS
+            destination: generic/platform=tvOS Simulator
+            slug: tvos
+          - name: watchOS
+            destination: generic/platform=watchOS Simulator
+            slug: watchos
+          - name: visionOS
+            destination: generic/platform=visionOS Simulator
+            slug: visionos
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Compile package
+        run: >-
+          xcodebuild
+          -scheme SupportKit-Package
+          -destination "${{ matrix.destination }}"
+          -derivedDataPath "$RUNNER_TEMP/DerivedData-${{ matrix.slug }}"
+          CODE_SIGNING_ALLOWED=NO
+          build
+
+  gateway:
+    name: Gateway
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Gateway
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: Gateway/package-lock.json
+          package-manager-cache: false
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Type-check, lint, test, and dry-run deployment
+        run: npm run check

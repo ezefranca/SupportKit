@@ -1,0 +1,42 @@
+name: Bug report
+description: Report a reproducible problem without private customer data.
+title: "Bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, real support payloads, or vulnerability details. Use private vulnerability reporting for security issues.
+  - type: input
+    id: version
+    attributes:
+      label: SupportKit version
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options: [iOS, iPadOS, macOS, tvOS, watchOS, visionOS, Server / adapter]
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Use synthetic values only.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true

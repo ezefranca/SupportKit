@@ -1,0 +1,16 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+*.xcresult
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+.env
+.env.*
+!.env.example
+*.key
+*.p12
+*.pem
+Gateway/node_modules/
+Gateway/.wrangler/
+Gateway/coverage/

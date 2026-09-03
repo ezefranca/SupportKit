@@ -1,0 +1,2 @@
+# Wrangler generates a few lines with trailing spaces. Keep the generated file byte-for-byte reproducible.
+Gateway/worker-configuration.d.ts -whitespace

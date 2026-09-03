@@ -1,0 +1,16 @@
+{
+  "threshold": 3,
+  "reporters": ["console"],
+  "format": ["swift"],
+  "min-lines": 12,
+  "min-tokens": 70,
+  "mode": "strict",
+  "absolute": true,
+  "gitignore": true,
+  "ignore": [
+    "**/.build/**",
+    "**/DerivedData/**",
+    "**/Gateway/**",
+    "**/Tests/**"
+  ]
+}
