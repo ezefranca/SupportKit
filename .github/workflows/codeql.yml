@@ -19,7 +19,7 @@ concurrency:
 jobs:
   analyze:
     name: Analyze ${{ matrix.language }}
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -45,7 +45,16 @@ jobs:
 
       - name: Build Swift
         if: matrix.language == 'swift'
-        run: swift build -c release
+        run: >-
+          xcodebuild
+          -scheme SupportKit-Package
+          -destination "generic/platform=macOS"
+          -derivedDataPath "$RUNNER_TEMP/CodeQLDerivedData"
+          -configuration Release
+          ARCHS=arm64
+          ONLY_ACTIVE_ARCH=YES
+          CODE_SIGNING_ALLOWED=NO
+          build
 
       - name: Analyze
         uses: github/codeql-action/analyze@cdf488f595d80d6e07e03d4674febd5ab45fa938 # v4.37.9
