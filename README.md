@@ -2,7 +2,7 @@
 
 [![Swift 6.2](https://img.shields.io/badge/Swift-6.2-F05138.svg?logo=swift)](https://swift.org)
 [![CI](https://github.com/ezefranca/SupportKit/actions/workflows/ci.yml/badge.svg)](https://github.com/ezefranca/SupportKit/actions/workflows/ci.yml)
-[![Documentation](https://img.shields.io/badge/DocC-Documentation-blue)](https://ezefranca.github.io/SupportKit/documentation/supportkit/)
+[![Documentation](https://img.shields.io/badge/DocC-Documentation-blue)](https://ezefranca.com/SupportKit/documentation/supportkit/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 SupportKit is a Swift package for collecting and delivering support reports from Apple apps. It includes a
@@ -337,7 +337,8 @@ case let .rejected(reason):
 
 ## Documentation
 
-- [Hosted DocC API and guides](https://ezefranca.github.io/SupportKit/documentation/supportkit/)
+- [Hosted DocC API and guides](https://ezefranca.com/SupportKit/documentation/supportkit/)
+- [Hosted SupportKitUI API and form guides](https://ezefranca.com/SupportKit/documentation/supportkitui/)
 - [Architecture](Documentation/Architecture.md)
 - [Reliability model](Documentation/Reliability.md)
 - [Privacy guide](Documentation/Privacy.md)
